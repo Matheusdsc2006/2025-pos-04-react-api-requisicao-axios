@@ -4,7 +4,6 @@ import { useState } from "react";
 import dados, { TarefaInterface } from "@/data";
 import Cabecalho from "@/componentes/Cabecalho";
 import { ModalTarefa } from "@/componentes/ModalTarefa";
-import Link from 'next/link'; // Importando o componente Link do Next.js
 
 interface TarefaProps {
   titulo: string;
@@ -78,13 +77,6 @@ const Home = () => {
         Adicionar Tarefa
       </button>
       
-      {/* Link para a página de tarefas */}
-      <div className="mb-6">
-        <Link href="http://localhost:3000/tarefas/"
-          className="text-blue-500 hover:text-blue-700">Ir para a página de Tarefas
-        </Link>
-      </div>
-
       <Tarefas 
         dados={tarefas} 
         onToggleTarefa={handleToggleTarefa} 
