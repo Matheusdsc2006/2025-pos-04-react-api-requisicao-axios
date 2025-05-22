@@ -190,3 +190,29 @@ A resposta do Axios contém várias propriedades úteis:
 - `headers`: Os cabeçalhos da resposta
 - `config`: A configuração da requisição
 
+## Parte 3. Atividade - Modificar o projeto de tarefas adicionando lista de tarefas
+
+### Pré-requisitos
+1. ter finalizado a atividade 3 [compartilhamento de dados entre componentes](https://github.com/infoweb-pos/2025-pos-03-react-compartilhando-dados-entre-componentes)
+
+### Qual a atividade
+
+1. Fork deste repositório (lembre de colocar seu nome no início desse arquivo)
+2. Copiar código do projeto (repositório) da atividade anterior (atividade 3 [compartilhamento de dados entre componentes](https://github.com/infoweb-pos/2025-pos-03-react-compartilhando-dados-entre-componentes))
+   1. lembrar de fazer `commit` com a mensagem "adicionado projeto inicial da tarefa"
+3. Executar a aplicação
+   1. `npm i` lembrar de instalar as libs
+   2. `npm run dev` executar de fato e lembrar de acessar com navegador http://localhost:3000
+4. Copiar `src/app/page.tsx` para `src/app/tarefas/page.tsx`
+   1. corrigir import, caso necessário
+   2. testar a url http://localhost:3000/tarefas/
+   3. lembrar de fazer `commit` com a mensagem "criado página de lista de tarefas"
+5. Modificar `src/app/page.tsx` para ter um link para http://localhost:3000/tarefas/
+   1. lembrar de fazer `commit` com a mensagem "adicionado a home um link de tarefas"
+6. Modificar o estado de lista de tarefas em `src/app/tarefas/page.tsx` para carregar dinamicamente as _todos_ de https://dummyjson.com/docs/todos
+   1. `npm i axios` instalar a lib para acessar API
+   2. trocar de constante (`const tarefas: TarefaInterface[] = dados`) para `useState` tarefas usando `dados` como valor inicial
+   3. trocar o valor inicial por vazio `[]`
+   4. adicionar o `useEffect` para carregar os dados da API
+   5. lembrar de fazer `commit` com a mensagem "adicionado acesso a api dummyjson"
+7. Publicar no repositório remoto as modificações `git push`
