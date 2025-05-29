@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import dados, { TarefaInterface } from "@/data";
 import Cabecalho from "@/componentes/Cabecalho";
 import { ModalTarefa } from "@/componentes/ModalTarefa";
@@ -46,9 +47,37 @@ const Tarefas: React.FC<TarefasProps> = ({ dados, onToggleTarefa }) => {
   );
 };
 
-const Home = () => {
-  const [tarefas, setTarefas] = useState<TarefaInterface[]>(dados);
+const TarefasPage = () => {
+  const [tarefas, setTarefas] = useState<TarefaInterface[]>(dados); // Inicia com os dados locais
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [loading, setLoading] = useState(false); // Não mostra loading inicial pois já temos dados locais
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTarefas = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('https://dummyjson.com/todos');
+        // Combina os dados locais com os da API, mantendo os títulos locais quando os IDs coincidem
+        const tarefasCombinadas = tarefas.map(tarefaLocal => {
+          const tarefaAPI = response.data.todos.find((t: TarefaInterface) => t.id === tarefaLocal.id);
+          return tarefaAPI ? { ...tarefaAPI, title: tarefaLocal.title } : tarefaLocal;
+        });
+        // Adiciona as tarefas da API que não existem localmente
+        const novasTarefas = response.data.todos.filter((t: TarefaInterface) => 
+          !tarefas.some(tl => tl.id === t.id)
+        );
+        setTarefas([...tarefasCombinadas, ...novasTarefas]);
+      } catch (err) {
+        setError('Erro ao carregar tarefas da API (usando dados locais)');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTarefas();
+  }, []);
 
   const handleAdicionarTarefa = (titulo: string) => {
     const novaTarefa: TarefaInterface = {
@@ -66,9 +95,24 @@ const Home = () => {
     ));
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <span className="ml-4">Atualizando tarefas...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto p-4">
       <Cabecalho />
+      
+      {error && (
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
+          <p>{error}</p>
+        </div>
+      )}
       
       <button
         onClick={() => setMostrarModal(true)}
@@ -92,4 +136,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default TarefasPage;
